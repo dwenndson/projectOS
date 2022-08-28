@@ -1,12 +1,14 @@
 package com.diegowenndson.springboot.domain;
 
+import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class Tecnico extends Pessoa implements Serializable {
-    private static long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     @OneToMany(mappedBy = "tecnico")
     private List<OS> list = new ArrayList<>();
     public Tecnico() {
