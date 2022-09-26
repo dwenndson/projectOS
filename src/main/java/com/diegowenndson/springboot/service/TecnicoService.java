@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.diegowenndson.springboot.DTO.TecnicoDTO;
+import com.diegowenndson.springboot.service.Exceptions.DataIntegratyViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,19 @@ public class TecnicoService {
     }
 
     public Tecnico create(TecnicoDTO objDTO){
+        if(findByCPF(objDTO) != null){
+            throw  new DataIntegratyViolationException("CPF ja cadastrado na base de dados");
+        }
         return tecnicoRepository.save(new Tecnico(null, objDTO.getNome(),
                 objDTO.getCpf(), objDTO.getTelefone()));
+    }
+
+    public Tecnico findByCPF(TecnicoDTO objDTO){
+        Optional<Tecnico> obj = Optional.ofNullable(tecnicoRepository.findByCPF(objDTO.getCpf()));
+        if(obj.isPresent()){
+            return obj.get();
+        }
+        return null;
     }
     
 }
