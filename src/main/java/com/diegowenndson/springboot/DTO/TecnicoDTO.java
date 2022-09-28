@@ -6,14 +6,18 @@ import org.hibernate.validator.constraints.br.CPF;
 
 import com.diegowenndson.springboot.domain.Tecnico;
 
+import javax.validation.constraints.NotEmpty;
+
 public class TecnicoDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer id;
+    @NotEmpty(message = "O campo Nome é obrigatório")
     private String nome;
-
+    @NotEmpty(message = "O campo cpf é obrigatório")
     @CPF
     private String cpf;
+    @NotEmpty(message = "O campo telefone é obrigatório")
     private String telefone;
 
     public TecnicoDTO(Tecnico tecnico) {

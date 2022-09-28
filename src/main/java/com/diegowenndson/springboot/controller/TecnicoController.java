@@ -9,13 +9,16 @@ import com.diegowenndson.springboot.DTO.TecnicoDTO;
 import com.diegowenndson.springboot.service.TecnicoService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping(value = "/tecnicos")
+@RequestMapping(value = "/tecnico")
 public class TecnicoController {
 
     @Autowired
@@ -47,11 +50,24 @@ public class TecnicoController {
     }
 
     @PostMapping
-    public ResponseEntity<TecnicoDTO> create(@RequestBody TecnicoDTO objDTO){
+    public ResponseEntity<TecnicoDTO> create(@Valid @RequestBody TecnicoDTO objDTO){
         Tecnico newObj = tecnicoService.create(objDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(newObj.getId()).toUri();
         return ResponseEntity.created(uri).build();
-
     }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<TecnicoDTO> update(@PathVariable Integer id,
+                                             @Valid @RequestBody TecnicoDTO objDTO){
+        TecnicoDTO newObj = new TecnicoDTO(tecnicoService.update(id, objDTO));
+        return ResponseEntity.ok().body(newObj);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
+        tecnicoService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
