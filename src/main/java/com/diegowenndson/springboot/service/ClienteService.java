@@ -10,6 +10,7 @@ import com.diegowenndson.springboot.service.Exceptions.ObjectNotFoundsExceptions
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,7 +43,7 @@ public class ClienteService {
                 clienteDTO.getTelefone()));
     }
 
-    public Cliente update(Integer id, ClienteDTO clienteDTO){
+    public Cliente update(Integer id,@Valid ClienteDTO clienteDTO){
         Cliente oldObj = findById(id);
         if(findByCPF(clienteDTO) != null && findByCPF(clienteDTO).getId() != id){
             throw new DataIntegratyViolationException("CPF já cadastrado na base de dados");
