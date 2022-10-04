@@ -4,6 +4,7 @@ import com.diegowenndson.springboot.DTO.OsDTO;
 import com.diegowenndson.springboot.domain.OS;
 import com.diegowenndson.springboot.service.OsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,6 +14,7 @@ import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/os")
 public class OsController {
@@ -40,5 +42,17 @@ public class OsController {
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(os.getId()).toUri();
         return ResponseEntity.created(uri).build();
+    }
+
+    @PutMapping()
+    public ResponseEntity<OsDTO> update(@Valid @RequestBody OsDTO dto){
+        dto = new OsDTO(osService.update(dto));
+        return ResponseEntity.ok().body(dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Integer id){
+        osService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
